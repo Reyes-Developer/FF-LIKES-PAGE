@@ -2,176 +2,228 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
-<title>Player ID Submission</title>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>reyes - Free Fire Dashboard</title>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet" />
 <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
 <style>
   :root {
-    --primary-color: #0a84ff;
-    --primary-hover: #0066ff;
-    --text-color: #1c1c1e;
-    --placeholder-color: #8e8e93;
-    --border-radius: 20px;
-    --shadow-color: rgba(0,0,0,0.12);
-    --font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    --primary: #0A84FF;
+    --primary-hover: #0066FF;
+    --background: #121212;
+    --sidebar-bg: #1E1E1E;
+    --text-light: #E0E0E0;
+    --text-muted: #A0A0A0;
+    --radius: 14px;
+    --shadow: rgba(0, 0, 0, 0.5);
+    --font: 'Montserrat', sans-serif;
   }
 
-  /* Reset */
   * {
     box-sizing: border-box;
   }
+
   html, body {
     margin: 0; padding: 0; height: 100%;
-    font-family: var(--font-family);
-    color: var(--text-color);
-    background: url('https://i.pinimg.com/originals/24/1p/9k/241p9kGON-background-blur.jpg') no-repeat center center fixed;
-    background-size: cover;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
+    font-family: var(--font);
+    background-color: var(--background);
+    color: var(--text-light);
     overflow: hidden;
   }
 
-  /* Particles background */
+  body {
+    display: flex;
+    height: 100vh;
+  }
+
   #particles-js {
     position: fixed;
-    top: 0; left: 0; right: 0; bottom: 0;
+    inset: 0;
     z-index: 0;
-    filter: brightness(0.9) contrast(1.1);
+    background: var(--background);
   }
 
-  /* Glassmorphism container */
-  .container {
-    position: relative;
-    z-index: 2;
-    max-width: 400px;
-    width: calc(100% - 40px);
-    margin: auto;
-    padding: 40px 28px 48px;
-    background: rgba(255, 255, 255, 0.15);
-    backdrop-filter: saturate(180%) blur(20px);
-    -webkit-backdrop-filter: saturate(180%) blur(20px);
-    border-radius: var(--border-radius);
-    border: 1px solid rgba(255, 255, 255, 0.25);
-    box-shadow:
-      0 8px 32px 0 rgba(31, 38, 135, 0.37),
-      inset 0 0 0 1px rgba(255, 255, 255, 0.18);
+  /* Sidebar */
+  .sidebar {
+    width: 240px;
+    background: var(--sidebar-bg);
+    display: flex;
+    flex-direction: column;
+    padding: 30px 0;
+    box-shadow: 2px 0 10px var(--shadow);
+    z-index: 10;
+  }
+
+  .sidebar h2 {
+    color: var(--primary);
+    font-weight: 700;
+    font-size: 1.8rem;
     text-align: center;
-    overflow: hidden;
-    transition: background 0.3s ease;
-  }
-  .container::before {
-    content: "";
-    position: absolute;
-    top: -50%;
-    left: -50%;
-    width: 200%;
-    height: 200%;
-    pointer-events: none;
-    background: linear-gradient(
-      120deg,
-      rgba(255, 255, 255, 0.15) 0%,
-      rgba(255, 255, 255, 0) 60%
-    );
-    transform: rotate(25deg);
-    animation: shineMove 3s linear infinite;
-    z-index: 1;
-    border-radius: var(--border-radius);
-    filter: blur(12px);
-    opacity: 0.5;
-  }
-  @keyframes shineMove {
-    0% { transform: rotate(25deg) translateX(-100%); }
-    100% { transform: rotate(25deg) translateX(100%); }
-  }
-  .container > * {
-    position: relative;
-    z-index: 2;
+    margin-bottom: 40px;
   }
 
-  h1 {
-    margin-bottom: 24px;
-    font-weight: 700;
-    font-size: 2rem;
-    letter-spacing: 0.02em;
+  .nav-links {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    flex-grow: 1;
   }
 
-  input[type="text"] {
-    width: 100%;
-    padding: 16px 20px;
-    border-radius: 14px;
-    border: 1.8px solid #ccc;
-    font-size: 1.2rem;
-    outline: none;
-    background: rgba(255,255,255,0.85);
-    color: var(--text-color);
-    box-shadow: inset 0 2px 6px rgba(0,0,0,0.07);
-    font-weight: 500;
-    transition: border-color 0.25s ease, box-shadow 0.25s ease;
-  }
-  input[type="text"]::placeholder {
-    color: var(--placeholder-color);
-    font-weight: 400;
-    font-style: italic;
-  }
-  input[type="text"]:focus {
-    border-color: var(--primary-color);
-    box-shadow: 0 0 8px var(--primary-color);
-    background: #fff;
+  .nav-links li {
+    margin-bottom: 20px;
   }
 
-  button {
-    width: 100%;
-    padding: 16px 0;
-    margin-top: 28px;
-    font-size: 1.25rem;
-    font-weight: 700;
-    border-radius: 14px;
-    border: none;
-    background: var(--primary-color);
-    color: white;
-    cursor: pointer;
-    box-shadow: 0 8px 20px rgba(10, 132, 255, 0.5);
-    transition: background 0.3s ease, transform 0.2s ease;
-    user-select: none;
-    letter-spacing: 0.02em;
-  }
-  button:hover:not(:disabled) {
-    background: var(--primary-hover);
-    transform: scale(1.05);
-    box-shadow: 0 12px 30px rgba(10, 132, 255, 0.65);
-  }
-  button:active:not(:disabled) {
-    transform: scale(0.95);
-    box-shadow: 0 6px 15px rgba(10, 132, 255, 0.4);
-  }
-  button:disabled {
-    opacity: 0.5;
-    cursor: not-allowed;
-    box-shadow: none;
-    transform: none;
-  }
-
-  .status {
-    margin-top: 20px;
-    font-size: 1.1rem;
-    min-height: 1.4em;
+  .nav-links a {
+    text-decoration: none;
+    color: var(--text-light);
     font-weight: 600;
-    user-select: none;
+    font-size: 1.1rem;
+    padding: 10px 30px;
+    display: flex;
+    align-items: center;
+    border-left: 4px solid transparent;
+    transition: all 0.3s ease;
   }
-  .status.error {
-    color: #ff453a;
+  .nav-links a:hover, .nav-links a.active {
+    background-color: var(--primary);
+    color: white;
+    border-left-color: white;
   }
-  .status.success {
-    color: #30d158;
+
+  .nav-links a svg {
+    margin-right: 12px;
+    fill: currentColor;
+  }
+
+  /* Main Content */
+  .main-content {
+    flex-grow: 1;
+    padding: 40px 50px;
+    overflow-y: auto;
+    position: relative;
+    z-index: 5;
+  }
+
+  .header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 40px;
+  }
+
+  .header h1 {
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--primary);
+    margin: 0;
+  }
+
+  .profile {
+    color: var(--text-light);
+    font-weight: 600;
+    font-size: 1rem;
+  }
+
+  /* Cards Grid */
+  .cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit,minmax(280px,1fr));
+    gap: 25px;
+  }
+
+  .card {
+    background: rgba(255 255 255 / 0.1);
+    border-radius: var(--radius);
+    padding: 25px 30px;
+    box-shadow: 0 8px 20px rgba(10, 132, 255, 0.2);
+    transition: background 0.3s ease;
+    cursor: default;
+  }
+  .card:hover {
+    background: rgba(10, 132, 255, 0.15);
+  }
+
+  .card h3 {
+    margin-top: 0;
+    margin-bottom: 15px;
+    font-weight: 700;
+    font-size: 1.3rem;
+    color: var(--primary);
+  }
+  .card p {
+    margin: 0;
+    color: var(--text-light);
+    font-weight: 500;
+  }
+
+  /* Input and button inside cards */
+  .card input[type="text"] {
+    width: 100%;
+    padding: 12px 18px;
+    border-radius: 12px;
+    border: none;
+    font-size: 1rem;
+    margin-bottom: 15px;
+    outline: none;
+  }
+  .card button {
+    padding: 12px 20px;
+    font-weight: 700;
+    border-radius: 12px;
+    border: none;
+    cursor: pointer;
+    background: var(--primary);
+    color: white;
+    font-size: 1rem;
+    transition: background 0.25s ease;
+  }
+  .card button:hover {
+    background: var(--primary-hover);
+  }
+
+  /* Scrollbar customization */
+  .main-content::-webkit-scrollbar {
+    width: 8px;
+  }
+  .main-content::-webkit-scrollbar-thumb {
+    background-color: var(--primary);
+    border-radius: 10px;
   }
 
   /* Responsive */
-  @media (max-width: 450px) {
-    h1 {
-      font-size: 1.6rem;
+  @media (max-width: 768px) {
+    body {
+      flex-direction: column;
     }
-    input[type="text"], button {
-      font-size: 1rem;
+    .sidebar {
+      width: 100%;
+      flex-direction: row;
+      padding: 10px 0;
+      overflow-x: auto;
+      box-shadow: none;
+    }
+    .nav-links {
+      display: flex;
+      gap: 15px;
+      flex-grow: 0;
+    }
+    .nav-links li {
+      margin: 0;
+    }
+    .nav-links a {
+      padding: 10px 15px;
+      border-left: none;
+      border-bottom: 3px solid transparent;
+    }
+    .nav-links a:hover, .nav-links a.active {
+      border-bottom-color: var(--primary);
+      background-color: transparent;
+      color: var(--primary);
+      border-left-color: transparent;
+    }
+    .main-content {
+      padding: 20px 15px;
+      height: calc(100vh - 60px);
     }
   }
 </style>
@@ -180,12 +232,44 @@
 
 <div id="particles-js"></div>
 
-<div class="container" role="main" aria-label="Submit Player ID to Telegram">
-  <h1>Submit Player ID</h1>
-  <input type="text" id="playerId" placeholder="Enter your Player ID" autocomplete="off" autocapitalize="off" />
-  <button id="sendBtn">Send</button>
-  <div id="status" class="status" aria-live="polite"></div>
-</div>
+<nav class="sidebar" aria-label="Sidebar Navigation">
+  <h2>Reyes</h2>
+  <ul class="nav-links" role="menu">
+    <li><a href="#" class="active" role="menuitem" tabindex="0">Dashboard</a></li>
+    <li><a href="#" role="menuitem" tabindex="-1">Likes</a></li>
+    <li><a href="#" role="menuitem" tabindex="-1">Settings</a></li>
+    <li><a href="#" role="menuitem" tabindex="-1">Logout</a></li>
+  </ul>
+</nav>
+
+<main class="main-content" role="main" aria-label="Dashboard Content">
+  <header class="header">
+    <h1>Dashboard</h1>
+    <div class="profile" aria-label="User Profile">
+      Welcome, Reyes
+    </div>
+  </header>
+
+  <section class="cards" aria-label="Statistics and actions">
+    <article class="card" aria-label="Likes Submitted">
+      <h3>Likes Submitted</h3>
+      <p>1200</p>
+    </article>
+
+    <article class="card" aria-label="Pending Likes">
+      <h3>Pending Likes</h3>
+      <p>45</p>
+    </article>
+
+    <article class="card" aria-label="Submit New Player ID">
+      <h3>Submit New Player ID</h3>
+      <input type="text" id="playerId" placeholder="Enter your Player ID" autocomplete="off" autocapitalize="off" />
+      <button id="sendBtn">Send</button>
+      <div id="status" class="status" aria-live="polite" style="margin-top: 10px; color: lightgreen;"></div>
+    </article>
+
+  </section>
+</main>
 
 <script>
   particlesJS('particles-js', {
@@ -221,6 +305,7 @@
     status.className = 'status';
     sendBtn.disabled = true;
     try {
+      // Aquí pondrías tu URL para el backend que envíe el mensaje a Telegram
       const resp = await fetch('https://your-backend-url.com/send', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -259,4 +344,4 @@
 </script>
 
 </body>
-    </html>
+  </html>
