@@ -209,5 +209,45 @@
     }
   });
 </script>
+<body>
+  
+  <!-- LOGIN OVERLAY -->
+<div id="login-overlay" style="position:fixed;top:0;left:0;width:100%;height:100%;background:#0e0e0e;z-index:9999;display:flex;justify-content:center;align-items:center;flex-direction:column;color:white;font-family:sans-serif;">
+  <h2 style="margin-bottom:10px;">Beta Access</h2>
+  <input type="text" id="username" placeholder="Username" style="padding:8px;margin:5px;border-radius:5px;border:none;width:200px;">
+  <input type="password" id="password" placeholder="Password" style="padding:8px;margin:5px;border-radius:5px;border:none;width:200px;">
+  <button onclick="login()" style="padding:8px 16px;margin-top:10px;border:none;border-radius:5px;background:#ff6ec7;color:white;cursor:pointer;">Enter</button>
+  <p id="login-message" style="margin-top:10px;font-size:14px;"></p>
+</div>
+
+<script>
+async function login() {
+  let user = document.getElementById("username").value;
+  let pass = document.getElementById("password").value;
+  let message = document.getElementById("login-message");
+
+  try {
+    let response = await fetch("src/usuarios.json");
+    let list = await response.json();
+
+    let valid = list.find(u => u.usuario === user && u.clave === pass);
+
+    if (valid) {
+      message.style.color = "lime";
+      message.textContent = "Access granted...";
+      setTimeout(() => {
+        document.getElementById("login-overlay").style.display = "none";
+      }, 1000);
+    } else {
+      message.style.color = "red";
+      message.textContent = "Invalid username or password.";
+    }
+  } catch (error) {
+    console.error("Error loading users:", error);
+    message.style.color = "red";
+    message.textContent = "Error connecting to server.";
+  }
+}
+</script>
 </body>
 </html>
