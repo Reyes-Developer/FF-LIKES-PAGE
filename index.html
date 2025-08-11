@@ -67,18 +67,13 @@
     .send-form .row{display:flex;gap:12px;margin-bottom:12px}
     .send-form .col{flex:1;min-width:0}
     label{display:block;font-size:0.85rem;color:var(--muted);margin-bottom:6px}
-    input[type="text"], select, .range-wrap{
+    input[type="text"], select {
       width:100%;padding:12px 14px;border-radius:10px;border:none;background:var(--glass);
       color:var(--text);font-size:1rem;outline:none;box-shadow:inset 0 2px 6px rgba(0,0,0,0.5);
     }
 
     /* special small selects */
     select{appearance:none;-webkit-appearance:none;background-image:linear-gradient(45deg,transparent 50%,var(--muted) 50%), linear-gradient(135deg,var(--muted) 50%,transparent 50%); background-position:calc(100% - 18px) calc(1em + 2px), calc(100% - 13px) calc(1em + 2px); background-size:5px 5px,5px 5px; background-repeat:no-repeat;}
-
-    /* amount + slider */
-    .range-wrap{display:flex;flex-direction:column;gap:10px}
-    .range{appearance:none;height:6px;border-radius:99px;background:linear-gradient(90deg,var(--accent),var(--accent-2));outline:none}
-    .range::-webkit-slider-thumb{appearance:none;width:18px;height:18px;border-radius:50%;background:white;box-shadow:0 3px 8px rgba(10,132,255,0.35)}
 
     /* submit */
     .btn {
@@ -124,7 +119,7 @@
     <!-- Main form -->
     <main class="main card send-form">
       <h2>Send Likes</h2>
-      <div class="muted">Enter Player ID & configure the amount/options — simulated UI (no backend bound)</div>
+      <div class="muted">Enter Player ID & select server and type</div>
 
       <div style="margin-bottom:14px">
         <label for="pid">Player ID</label>
@@ -138,6 +133,7 @@
             <option value="global">Global</option>
             <option value="brazil">Brazil</option>
             <option value="india">India</option>
+            <option value="us">United States</option>
           </select>
         </div>
         <div class="col">
@@ -145,16 +141,12 @@
           <select id="type">
             <option value="likes">Likes</option>
             <option value="views">Views</option>
-            <option value="followers">Followers</option>
+            <option value="info">Info</option>
           </select>
         </div>
       </div>
 
-      <div class="range-wrap" style="margin-bottom:12px">
-        <label for="amount">Amount: <span id="amountVal">50</span></label>
-        <input id="amount" type="range" min="10" max="500" value="50" class="range" />
-        <div class="help">Use the slider to choose amount. Higher amounts might take longer to process.</div>
-      </div>
+      <!-- Amount removed as requested -->
 
       <div style="display:flex;gap:12px;align-items:center;margin-top:10px">
         <button id="submitBtn" class="btn"><span>Send</span></button>
@@ -221,20 +213,15 @@
     retina_detect:true
   });
 
-  // UI logic
-  const amount = document.getElementById('amount');
-  const amountVal = document.getElementById('amountVal');
   const pid = document.getElementById('pid');
   const submitBtn = document.getElementById('submitBtn');
   const sendInfo = document.getElementById('sendInfo');
   const result = document.getElementById('result');
   const refreshStats = document.getElementById('refreshStats');
-
-  amount.addEventListener('input', () => amountVal.textContent = amount.value);
+  const typeSelect = document.getElementById('type');
 
   function validate(){
-    const v = pid.value && pid.value.trim().length >= 3;
-    return v;
+    return pid.value && pid.value.trim().length >= 3;
   }
 
   submitBtn.addEventListener('click', async () => {
@@ -243,20 +230,33 @@
       result.style.color = '#ff6b6b';
       return;
     }
+    const type = typeSelect.value;
+    if(type === 'views'){
+      // Views under maintenance message:
+      result.textContent = '⚠️ Views are temporarily under maintenance.';
+      result.style.color = '#ffcc00';
+      return;
+    }
+
     submitBtn.disabled = true;
     sendInfo.textContent = 'Sending...';
-    // show spinner inside button
     const spinner = document.createElement('span');
     spinner.className = 'spinner';
     submitBtn.prepend(spinner);
 
-    // Simulated workflow: this is where you'd call your backend or proxy endpoint.
-    // Example: await fetch('/send', {method:'POST', body: JSON.stringify({...})})
-    // For safety I only simulate success after delay:
     try{
-      await new Promise(r => setTimeout(r, 1200)); // simulate network
-      // Simulate success
-      result.textContent = `Sent: /like ${pid.value.trim()} (x${amount.value})`;
+      // Simulate delay
+      await new Promise(r => setTimeout(r, 1200));
+
+      if(type === 'info'){
+        result.textContent = `Sent: /info ${pid.value.trim()}`;
+      } else if(type === 'likes'){
+        result.textContent = `Sent: /like ${pid.value.trim()}`;
+      } else {
+        result.textContent = 'Unknown type';
+        result.style.color = '#ff6b6b';
+        return;
+      }
       result.style.color = 'var(--success)';
       sendInfo.textContent = 'Last sent just now';
     }catch(e){
@@ -273,15 +273,14 @@
     refreshStats.disabled = true;
     refreshStats.textContent = 'Refreshing...';
     await new Promise(r => setTimeout(r,800));
-    // Ideally you'd fetch fresh numbers. Here we just randomize small amounts.
     document.querySelectorAll('.stat .value').forEach((el, idx) => {
       const base = [1245,45,99][idx];
       const random = Math.floor(Math.random()*20) - 5;
-      el.textContent = (base + random) + (idx===2? (idx===2? '%' : '') : '');
+      el.textContent = (base + random) + (idx===2? '%' : '');
     });
     refreshStats.disabled = false;
     refreshStats.textContent = 'Refresh';
   });
 </script>
 </body>
-  </html>
+</html>
