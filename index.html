@@ -1,0 +1,300 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>reyes - Dashboard (Send Likes)</title>
+
+  <!-- Font -->
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
+
+  <!-- particles.js -->
+  <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
+
+  <style>
+    :root{
+      --bg:#0b0f14;
+      --panel: rgba(255,255,255,0.06);
+      --glass: rgba(255,255,255,0.08);
+      --accent: #0A84FF;
+      --accent-2: #00C6FF;
+      --card-radius: 14px;
+      --glass-border: rgba(255,255,255,0.08);
+      --muted: #9aa4b2;
+      --text: #e9f0f7;
+      --success: #30d158;
+      font-family: 'Montserrat', -apple-system, system-ui, Roboto, 'Helvetica Neue', Arial;
+    }
+
+    html,body{
+      height:100%;margin:0;background:var(--bg);color:var(--text);
+      -webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;
+      display:flex;
+      justify-content:center;
+      align-items:center;
+      padding: 20px;
+      overflow: hidden; /* Prevent scroll when locked */
+    }
+
+    /* particles full screen */
+    #particles-js{position:fixed;inset:0;z-index:0;filter:brightness(0.9) contrast(1.02);}
+
+    /* center layout wrapper */
+    .wrap{
+      position:relative;z-index:2;
+      max-width:400px;
+      width:100%;
+      background: linear-gradient(180deg, rgba(255,255,255,0.04), rgba(255,255,255,0.02));
+      border-radius: var(--card-radius);
+      border:1px solid var(--glass-border);
+      padding:24px;
+      box-shadow: 0 12px 30px rgba(0,0,0,0.6);
+      backdrop-filter: blur(10px) saturate(140%);
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    /* card h2 */
+    .wrap h2{
+      margin:0 0 12px;font-size:1.5rem;color:var(--accent);letter-spacing:0.01em;
+      text-align: center;
+    }
+
+    .muted{color:var(--muted);font-size:0.95rem;margin-bottom:12px;text-align:center;}
+
+    label{display:block;font-size:0.85rem;color:var(--muted);margin-bottom:6px}
+    input[type="text"], select, .range-wrap{
+      width:100%;padding:12px 14px;border-radius:10px;border:none;background:var(--glass);
+      color:var(--text);font-size:1rem;outline:none;box-shadow:inset 0 2px 6px rgba(0,0,0,0.5);
+    }
+
+    /* special small selects */
+    select{appearance:none;-webkit-appearance:none;background-image:linear-gradient(45deg,transparent 50%,var(--muted) 50%), linear-gradient(135deg,var(--muted) 50%,transparent 50%); background-position:calc(100% - 18px) calc(1em + 2px), calc(100% - 13px) calc(1em + 2px); background-size:5px 5px,5px 5px; background-repeat:no-repeat;}
+
+    /* submit */
+    .btn {
+      display:inline-flex;align-items:center;justify-content:center;gap:8px;
+      background:linear-gradient(180deg,var(--accent),var(--primary-hover, #0066FF));
+      color:white;padding:12px 18px;border-radius:10px;border:none;font-weight:700;
+      box-shadow:0 10px 24px rgba(10,132,255,0.18);cursor:pointer;
+      width: 100%;
+      font-size: 1.1rem;
+    }
+    .btn[disabled]{opacity:0.6;cursor:not-allowed}
+
+    .spinner{width:18px;height:18px;border-radius:50%;border:3px solid rgba(255,255,255,0.25);border-top-color:white;animation:spin .8s linear infinite}
+    @keyframes spin{to{transform:rotate(360deg)}}
+
+    #result {
+      margin-top: 14px;
+      font-weight: 700;
+      text-align: center;
+      min-height: 1.4em;
+    }
+
+    /* ----------------------------- */
+    /* LOCK SCREEN STYLES */
+    #lockscreen {
+      position: fixed;
+      inset: 0;
+      background: var(--bg);
+      z-index: 9999;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      backdrop-filter: blur(15px) saturate(120%);
+    }
+
+    #lockscreen .wrap {
+      max-width: 350px;
+      width: 100%;
+      text-align: center;
+    }
+
+    #lockscreen input[type="password"] {
+      margin-top: 8px;
+      margin-bottom: 16px;
+      width: 100%;
+      padding: 12px 14px;
+      border-radius: 10px;
+      border: none;
+      background: var(--glass);
+      color: var(--text);
+      font-size: 1rem;
+      box-shadow: inset 0 2px 6px rgba(0,0,0,0.5);
+      outline: none;
+    }
+
+    #lockscreen .btn {
+      width: 100%;
+      font-weight: 700;
+      padding: 12px 0;
+      cursor: pointer;
+      user-select: none;
+    }
+
+    #lockscreen .error-msg {
+      color: #ff6b6b;
+      font-weight: 600;
+      margin-bottom: 10px;
+      min-height: 1.2em;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- LOCK SCREEN -->
+  <div id="lockscreen">
+    <div class="wrap">
+      <h2>Enter Password</h2>
+      <input type="password" id="passwordInput" placeholder="Enter code here" autocomplete="off" />
+      <button id="unlockBtn" class="btn">Unlock</button>
+      <div class="error-msg" id="errorMsg"></div>
+    </div>
+  </div>
+
+  <!-- ORIGINAL PAGE -->
+  <div id="particles-js"></div>
+
+  <div class="wrap" id="mainContent" style="display:none;">
+    <h2>Send Likes</h2>
+    <div class="muted">Enter Player ID & configure the amount/options — simulated UI (no backend bound)</div>
+
+    <div>
+      <label for="pid">Player ID</label>
+      <input id="pid" type="text" placeholder="e.g. 12345678" />
+    </div>
+
+    <div style="display:flex;gap:12px;margin-bottom:12px;">
+      <div style="flex:1;">
+        <label for="server">Server</label>
+        <select id="server">
+          <option value="global">Global</option>
+          <option value="brazil">Brazil</option>
+          <option value="india">India</option>
+          <option value="us">United States</option>
+        </select>
+      </div>
+      <div style="flex:1;">
+        <label for="type">Type</label>
+        <select id="type">
+          <option value="likes">Likes</option>
+          <option value="views">Views</option>
+          <option value="info">Info</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- Amount slider REMOVED -->
+
+    <button id="submitBtn" class="btn"><span>Send</span></button>
+    <div id="sendInfo" class="muted" style="font-size:0.95rem; margin-top:10px;">Ready</div>
+    <div id="result"></div>
+  </div>
+
+<script>
+  // particles config (soft, bright dots)
+  particlesJS('particles-js', {
+    particles: {
+      number: { value: 45, density: { enable: true, value_area: 800 } },
+      color: { value: '#9fbbe8' },
+      shape: { type: 'circle' },
+      opacity: { value: 0.25, anim: { enable:false } },
+      size: { value: 3, random: true },
+      line_linked: {
+        enable: true,
+        distance: 150,
+        color: "#9fbbe8",
+        opacity: 0.4,
+        width: 1
+      },
+      move: { enable:true, speed: 1.2, direction: 'none', out_mode:'out' }
+    },
+    interactivity: {
+      detect_on: 'canvas',
+      events: { onhover:{ enable:true, mode:'repulse' }, onclick:{ enable:true, mode:'push' } },
+      modes: { repulse:{ distance:90 }, push:{ particles_nb: 4 } }
+    },
+    retina_detect:true
+  });
+
+  const pid = document.getElementById('pid');
+  const submitBtn = document.getElementById('submitBtn');
+  const sendInfo = document.getElementById('sendInfo');
+  const result = document.getElementById('result');
+  const server = document.getElementById('server');
+  const type = document.getElementById('type');
+
+  // LOCKSCREEN ELEMENTS
+  const lockscreen = document.getElementById('lockscreen');
+  const mainContent = document.getElementById('mainContent');
+  const passwordInput = document.getElementById('passwordInput');
+  const unlockBtn = document.getElementById('unlockBtn');
+  const errorMsg = document.getElementById('errorMsg');
+
+  function validate() {
+    return pid.value && pid.value.trim().length >= 3;
+  }
+
+  submitBtn.addEventListener('click', async () => {
+    if (!validate()) {
+      result.textContent = 'Invalid Player ID';
+      result.style.color = '#ff6b6b';
+      return;
+    }
+    submitBtn.disabled = true;
+    sendInfo.textContent = 'Sending...';
+    const spinner = document.createElement('span');
+    spinner.className = 'spinner';
+    submitBtn.prepend(spinner);
+
+    try {
+      if(type.value === 'views') {
+        // Views maintenance message
+        throw new Error('Views feature is temporarily under maintenance.');
+      }
+
+      // Simulate sending fetch request
+      const command = type.value === 'info' ? `/info ${pid.value.trim()}` : `/like ${pid.value.trim()}`;
+
+      // Fake fetch example (simulate network delay)
+      await new Promise(r => setTimeout(r, 1200));
+
+      // Simulate success response:
+      result.textContent = `Sent: ${command}`;
+      result.style.color = 'var(--success)';
+      sendInfo.textContent = 'Last sent just now';
+
+    } catch (error) {
+      result.textContent = error.message || 'Failed to send';
+      result.style.color = '#ff6b6b';
+      sendInfo.textContent = 'Error';
+    } finally {
+      submitBtn.disabled = false;
+      spinner.remove();
+    }
+  });
+
+  unlockBtn.addEventListener('click', () => {
+    if (passwordInput.value === 'reyes1234') {
+      lockscreen.style.display = 'none';
+      mainContent.style.display = 'flex';
+      errorMsg.textContent = '';
+      passwordInput.value = '';
+    } else {
+      errorMsg.textContent = 'Incorrect password. Try again.';
+      passwordInput.value = '';
+      passwordInput.focus();
+    }
+  });
+
+  // Optional: Allow Enter key to submit unlock
+  passwordInput.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') {
+      unlockBtn.click();
+    }
+  });
+</script>
+</body>
+  </html>
