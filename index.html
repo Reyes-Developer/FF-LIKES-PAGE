@@ -210,44 +210,112 @@
   });
 </script>
 <body>
-  
-  <!-- LOGIN OVERLAY -->
-<div id="login-overlay" style="position:fixed;top:0;left:0;width:100%;height:100%;background:#0e0e0e;z-index:9999;display:flex;justify-content:center;align-items:center;flex-direction:column;color:white;font-family:sans-serif;">
-  <h2 style="margin-bottom:10px;">Beta Access</h2>
-  <input type="text" id="username" placeholder="Username" style="padding:8px;margin:5px;border-radius:5px;border:none;width:200px;">
-  <input type="password" id="password" placeholder="Password" style="padding:8px;margin:5px;border-radius:5px;border:none;width:200px;">
-  <button onclick="login()" style="padding:8px 16px;margin-top:10px;border:none;border-radius:5px;background:#ff6ec7;color:white;cursor:pointer;">Enter</button>
-  <p id="login-message" style="margin-top:10px;font-size:14px;"></p>
+  <!-- LOGIN -->
+<div id="login-container" class="login-card">
+    <h2>Welcome Back 💖</h2>
+    <input type="text" id="username" placeholder="Username">
+    <input type="password" id="password" placeholder="Password">
+    <button onclick="login()">Enter </button>
+    <p id="login-error" class="error-text"></p>
 </div>
 
-<script>
-async function login() {
-  let user = document.getElementById("username").value;
-  let pass = document.getElementById("password").value;
-  let message = document.getElementById("login-message");
-
-  try {
-    let response = await fetch("src/usuarios.json");
-    let list = await response.json();
-
-    let valid = list.find(u => u.usuario === user && u.clave === pass);
-
-    if (valid) {
-      message.style.color = "lime";
-      message.textContent = "Access granted...";
-      setTimeout(() => {
-        document.getElementById("login-overlay").style.display = "none";
-      }, 1000);
-    } else {
-      message.style.color = "red";
-      message.textContent = "Invalid username or password.";
+<style>
+    body {
+        font-family: 'Poppins', sans-serif; /* font */
+        background-color: #ffeaf4; /*  */
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        margin: 0;
     }
-  } catch (error) {
-    console.error("Error loading users:", error);
-    message.style.color = "red";
-    message.textContent = "Error connecting to server.";
-  }
-}
+
+    .login-card {
+        background: #fff7fc;
+        padding: 25px;
+        border-radius: 20px;
+        box-shadow: 0px 8px 25px rgba(255, 182, 193, 0.4);
+        width: 300px;
+        text-align: center;
+        animation: fadeIn 0.6s ease-in-out;
+    }
+
+    .login-card h2 {
+        margin-bottom: 20px;
+        color: #ff69b4;
+        font-size: 22px;
+    }
+
+    .login-card input {
+        width: 90%;
+        padding: 10px;
+        margin: 8px 0;
+        border-radius: 15px;
+        border: 2px solid #ffb6c1;
+        outline: none;
+        background-color: #fff0f5;
+        font-size: 14px;
+    }
+
+    .login-card input:focus {
+        border-color: #ff69b4;
+        background-color: #ffe4ef;
+    }
+
+    .login-card button {
+        background-color: #ff69b4;
+        border: none;
+        color: white;
+        padding: 10px 20px;
+        margin-top: 15px;
+        border-radius: 15px;
+        cursor: pointer;
+        transition: 0.3s;
+        font-size: 14px;
+    }
+
+    .login-card button:hover {
+        background-color: #ff85c1;
+    }
+
+    .error-text {
+        color: red;
+        font-size: 12px;
+        margin-top: 10px;
+    }
+
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(10px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+</style>
+
+<script>
+    async function login() {
+        let user = document.getElementById("username").value.trim();
+        let pass = document.getElementById("password").value.trim();
+        let errorText = document.getElementById("login-error");
+
+        try {
+            let response = await fetch("usuarios.json");
+            let data = await response.json();
+
+            let found = data.users.find(u => u.username === user && u.password === pass);
+
+            if (found) {
+                errorText.style.color = "green";
+                errorText.innerText = "Login successful!";
+                setTimeout(() => {
+                    document.getElementById("login-container").style.display = "none";
+                    // Aquí pones la función para mostrar el dashboard
+                }, 1000);
+            } else {
+                errorText.innerText = "Invalid credentials";
+            }
+        } catch (e) {
+            errorText.innerText = "Error connecting to server";
+        }
+    }
 </script>
 </body>
 </html>
