@@ -71,11 +71,6 @@
     /* special small selects */
     select{appearance:none;-webkit-appearance:none;background-image:linear-gradient(45deg,transparent 50%,var(--muted) 50%), linear-gradient(135deg,var(--muted) 50%,transparent 50%); background-position:calc(100% - 18px) calc(1em + 2px), calc(100% - 13px) calc(1em + 2px); background-size:5px 5px,5px 5px; background-repeat:no-repeat;}
 
-    /* amount + slider */
-    .range-wrap{display:flex;flex-direction:column;gap:10px;margin-bottom:12px}
-    .range{appearance:none;height:6px;border-radius:99px;background:linear-gradient(90deg,var(--accent),var(--accent-2));outline:none}
-    .range::-webkit-slider-thumb{appearance:none;width:18px;height:18px;border-radius:50%;background:white;box-shadow:0 3px 8px rgba(10,132,255,0.35)}
-
     /* submit */
     .btn {
       display:inline-flex;align-items:center;justify-content:center;gap:8px;
@@ -131,11 +126,7 @@
       </div>
     </div>
 
-    <div class="range-wrap">
-      <label for="amount">Amount: <span id="amountVal">50</span></label>
-      <input id="amount" type="range" min="10" max="500" value="50" class="range" />
-      <div class="help">Use the slider to choose amount. Higher amounts might take longer to process.</div>
-    </div>
+    <!-- Amount slider REMOVED -->
 
     <button id="submitBtn" class="btn"><span>Send</span></button>
     <div id="sendInfo" class="muted" style="font-size:0.95rem; margin-top:10px;">Ready</div>
@@ -162,16 +153,12 @@
     retina_detect:true
   });
 
-  const amount = document.getElementById('amount');
-  const amountVal = document.getElementById('amountVal');
   const pid = document.getElementById('pid');
   const submitBtn = document.getElementById('submitBtn');
   const sendInfo = document.getElementById('sendInfo');
   const result = document.getElementById('result');
   const server = document.getElementById('server');
   const type = document.getElementById('type');
-
-  amount.addEventListener('input', () => amountVal.textContent = amount.value);
 
   function validate() {
     return pid.value && pid.value.trim().length >= 3;
@@ -196,8 +183,7 @@
       }
 
       // Simulate sending fetch request
-      // Replace the URL with your real backend endpoint if you have one
-      const command = type.value === 'info' ? `/info ${pid.value.trim()}` : `/like ${pid.value.trim()} (x${amount.value})`;
+      const command = type.value === 'info' ? `/info ${pid.value.trim()}` : `/like ${pid.value.trim()}`;
 
       // Fake fetch example (simulate network delay)
       await new Promise(r => setTimeout(r, 1200));
@@ -218,4 +204,4 @@
   });
 </script>
 </body>
-</html>
+  </html>
