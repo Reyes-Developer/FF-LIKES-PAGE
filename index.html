@@ -1,396 +1,287 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>reyes - Free Fire Dashboard</title>
-<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet" />
-<script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
-<style>
-  :root {
-    --primary: #0A84FF;
-    --primary-hover: #0066FF;
-    --background: #121212;
-    --sidebar-bg: #1E1E1E;
-    --text-light: #E0E0E0;
-    --text-muted: #A0A0A0;
-    --radius: 20px;
-    --shadow: rgba(0, 0, 0, 0.5);
-    --font: 'Montserrat', sans-serif;
-  }
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>reyes - Dashboard (Send Likes)</title>
 
-  * {
-    box-sizing: border-box;
-  }
+  <!-- Font -->
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
 
-  html, body {
-    margin: 0; padding: 0; height: 100%;
-    font-family: var(--font);
-    background-color: var(--background);
-    color: var(--text-light);
-    overflow: hidden;
-  }
+  <!-- particles.js -->
+  <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
 
-  body {
-    display: flex;
-    height: 100vh;
-  }
-
-  #particles-js {
-    position: fixed;
-    inset: 0;
-    z-index: 0;
-    background: var(--background);
-  }
-
-  /* Sidebar */
-  .sidebar {
-    width: 240px;
-    background: var(--sidebar-bg);
-    display: flex;
-    flex-direction: column;
-    padding: 30px 0;
-    box-shadow: 2px 0 10px var(--shadow);
-    z-index: 10;
-  }
-
-  .sidebar h2 {
-    color: var(--primary);
-    font-weight: 700;
-    font-size: 1.8rem;
-    text-align: center;
-    margin-bottom: 40px;
-  }
-
-  .nav-links {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-    flex-grow: 1;
-  }
-
-  .nav-links li {
-    margin-bottom: 20px;
-  }
-
-  .nav-links a {
-    text-decoration: none;
-    color: var(--text-light);
-    font-weight: 600;
-    font-size: 1.1rem;
-    padding: 10px 30px;
-    display: flex;
-    align-items: center;
-    border-left: 4px solid transparent;
-    transition: all 0.3s ease;
-  }
-  .nav-links a:hover, .nav-links a.active {
-    background-color: var(--primary);
-    color: white;
-    border-left-color: white;
-  }
-
-  /* Main Content */
-  .main-content {
-    flex-grow: 1;
-    padding: 40px 50px;
-    overflow-y: auto;
-    position: relative;
-    z-index: 5;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-  }
-
-  .header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 40px;
-    width: 100%;
-    max-width: 900px;
-  }
-
-  .header h1 {
-    font-size: 2rem;
-    font-weight: 700;
-    color: var(--primary);
-    margin: 0;
-  }
-
-  .profile {
-    color: var(--text-light);
-    font-weight: 600;
-    font-size: 1rem;
-  }
-
-  /* Cards container */
-  .cards {
-    display: flex;
-    gap: 24px;
-    flex-wrap: wrap;
-    justify-content: center;
-    max-width: 900px;
-    width: 100%;
-  }
-
-  /* Card style (isla cristal iOS) */
-  .card {
-    background: rgba(255, 255, 255, 0.12);
-    backdrop-filter: saturate(180%) blur(20px);
-    -webkit-backdrop-filter: saturate(180%) blur(20px);
-    border-radius: var(--radius);
-    border: 1px solid rgba(255, 255, 255, 0.15);
-    box-shadow: 0 8px 32px rgba(31, 38, 135, 0.37);
-    color: white;
-    width: 320px;
-    box-sizing: border-box;
-    transition: background-color 0.3s ease;
-    padding: 30px;
-  }
-
-  .card:hover {
-    background: rgba(10, 132, 255, 0.15);
-  }
-
-  .card h3 {
-    font-weight: 700;
-    font-size: 1.8rem;
-    margin-bottom: 20px;
-    color: var(--primary);
-    letter-spacing: 0.03em;
-  }
-
-  /* Inputs y botón */
-  .card input[type="text"] {
-    width: 100%;
-    padding: 16px 18px;
-    border-radius: 14px;
-    border: none;
-    font-size: 1.15rem;
-    margin-bottom: 20px;
-    outline: none;
-    font-weight: 500;
-    background: rgba(255 255 255 / 0.8);
-    color: #000;
-    box-shadow: inset 0 1px 4px rgba(0,0,0,0.15);
-  }
-
-  .card button {
-    width: 100%;
-    padding: 14px 0;
-    font-weight: 700;
-    font-size: 1.2rem;
-    border-radius: 14px;
-    border: none;
-    cursor: pointer;
-    background: var(--primary);
-    color: white;
-    transition: background-color 0.3s ease;
-  }
-
-  .card button:hover {
-    background: var(--primary-hover);
-  }
-
-  /* Quick stats lista */
-  .quick-stats ul {
-    list-style:none; 
-    padding-left: 0; 
-    margin: 0;
-  }
-
-  .quick-stats ul li {
-    font-size: 1.1rem;
-    padding: 8px 0;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-  }
-
-  .quick-stats ul li:last-child {
-    border-bottom: none;
-  }
-
-  /* Status message */
-  .status {
-    margin-top: 15px;
-    min-height: 1.4em;
-    font-weight: 600;
-  }
-
-  .status.error {
-    color: #ff453a;
-  }
-
-  .status.success {
-    color: #30d158;
-  }
-
-  /* Scrollbar customization */
-  .main-content::-webkit-scrollbar {
-    width: 8px;
-  }
-  .main-content::-webkit-scrollbar-thumb {
-    background-color: var(--primary);
-    border-radius: 10px;
-  }
-
-  /* Responsive */
-  @media (max-width: 768px) {
-    body {
-      flex-direction: column;
-      overflow-y: auto;
+  <style>
+    :root{
+      --bg:#0b0f14;
+      --panel: rgba(255,255,255,0.06);
+      --glass: rgba(255,255,255,0.08);
+      --accent: #0A84FF;
+      --accent-2: #00C6FF;
+      --card-radius: 14px;
+      --glass-border: rgba(255,255,255,0.08);
+      --muted: #9aa4b2;
+      --text: #e9f0f7;
+      --success: #30d158;
+      font-family: 'Montserrat', -apple-system, system-ui, Roboto, 'Helvetica Neue', Arial;
     }
-    .sidebar {
-      width: 100%;
-      flex-direction: row;
-      padding: 10px 0;
-      overflow-x: auto;
-      box-shadow: none;
+
+    html,body{
+      height:100%;margin:0;background:var(--bg);color:var(--text);
+      -webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;
     }
-    .nav-links {
-      display: flex;
-      gap: 15px;
-      flex-grow: 0;
+
+    /* particles full screen */
+    #particles-js{position:fixed;inset:0;z-index:0;filter:brightness(0.9) contrast(1.02);}
+
+    /* center layout wrapper */
+    .wrap{
+      position:relative;z-index:2;
+      display:flex;gap:28px;
+      max-width:1100px;margin:6vh auto;padding:24px;
+      align-items:flex-start;
     }
-    .nav-links li {
-      margin: 0;
+
+    /* main column */
+    .main {
+      flex:1;
+      min-width:320px;
     }
-    .nav-links a {
-      padding: 10px 15px;
-      border-left: none;
-      border-bottom: 3px solid transparent;
+
+    /* card / panel style (glass) */
+    .card {
+      background: linear-gradient(180deg, rgba(255,255,255,0.04), rgba(255,255,255,0.02));
+      border-radius: var(--card-radius);
+      border:1px solid var(--glass-border);
+      padding:20px;
+      box-shadow: 0 12px 30px rgba(0,0,0,0.6);
+      backdrop-filter: blur(10px) saturate(140%);
     }
-    .nav-links a:hover, .nav-links a.active {
-      border-bottom-color: var(--primary);
-      background-color: transparent;
-      color: var(--primary);
-      border-left-color: transparent;
+
+    .card h2{
+      margin:0 0 12px;font-size:1.25rem;color:var(--accent);letter-spacing:0.01em;
     }
-    .main-content {
-      padding: 20px 15px;
-      height: auto;
+    .muted{color:var(--muted);font-size:0.95rem;margin-bottom:12px;}
+
+    /* Send Likes layout */
+    .send-form .row{display:flex;gap:12px;margin-bottom:12px}
+    .send-form .col{flex:1;min-width:0}
+    label{display:block;font-size:0.85rem;color:var(--muted);margin-bottom:6px}
+    input[type="text"], select, .range-wrap{
+      width:100%;padding:12px 14px;border-radius:10px;border:none;background:var(--glass);
+      color:var(--text);font-size:1rem;outline:none;box-shadow:inset 0 2px 6px rgba(0,0,0,0.5);
     }
-    .cards {
-      flex-direction: column;
-      align-items: center;
+
+    /* special small selects */
+    select{appearance:none;-webkit-appearance:none;background-image:linear-gradient(45deg,transparent 50%,var(--muted) 50%), linear-gradient(135deg,var(--muted) 50%,transparent 50%); background-position:calc(100% - 18px) calc(1em + 2px), calc(100% - 13px) calc(1em + 2px); background-size:5px 5px,5px 5px; background-repeat:no-repeat;}
+
+    /* amount + slider */
+    .range-wrap{display:flex;flex-direction:column;gap:10px}
+    .range{appearance:none;height:6px;border-radius:99px;background:linear-gradient(90deg,var(--accent),var(--accent-2));outline:none}
+    .range::-webkit-slider-thumb{appearance:none;width:18px;height:18px;border-radius:50%;background:white;box-shadow:0 3px 8px rgba(10,132,255,0.35)}
+
+    /* submit */
+    .btn {
+      display:inline-flex;align-items:center;justify-content:center;gap:8px;
+      background:linear-gradient(180deg,var(--accent),var(--primary-hover, #0066FF));
+      color:white;padding:12px 18px;border-radius:10px;border:none;font-weight:700;
+      box-shadow:0 10px 24px rgba(10,132,255,0.18);cursor:pointer;
     }
-  }
-</style>
+    .btn[disabled]{opacity:0.6;cursor:not-allowed}
+
+    .spinner{width:18px;height:18px;border-radius:50%;border:3px solid rgba(255,255,255,0.25);border-top-color:white;animation:spin .8s linear infinite}
+    @keyframes spin{to{transform:rotate(360deg)}}
+
+    /* Quick stats card (side) */
+    .aside {width:320px;min-width:260px}
+    .stats-list{display:flex;flex-direction:column;gap:12px}
+    .stat {
+      display:flex;align-items:center;justify-content:space-between;padding:12px;border-radius:10px;background:rgba(255,255,255,0.03);
+      border:1px solid rgba(255,255,255,0.03)
+    }
+    .stat .left{display:flex;flex-direction:column}
+    .stat .label{color:var(--muted);font-size:0.9rem}
+    .stat .value{font-weight:700;font-size:1.1rem;color:var(--text)}
+    .progress {height:8px;border-radius:999px;background:rgba(255,255,255,0.06);overflow:hidden;margin-top:8px}
+    .progress > i{display:block;height:100%;background:linear-gradient(90deg,var(--accent),var(--accent-2));width:40%}
+
+    /* small helpers */
+    .help{font-size:0.85rem;color:var(--muted);margin-top:10px}
+    .center{display:flex;justify-content:center;align-items:center}
+
+    /* responsive */
+    @media (max-width:980px){
+      .wrap{flex-direction:column;padding:20px;margin-top:4vh}
+      .aside{width:100%}
+    }
+  </style>
 </head>
 <body>
 
-<div id="particles-js"></div>
+  <div id="particles-js"></div>
 
-<nav class="sidebar" aria-label="Sidebar Navigation">
-  <h2>Reyes</h2>
-  <ul class="nav-links" role="menu">
-    <li><a href="#" class="active" role="menuitem" tabindex="0">Dashboard</a></li>
-    <li><a href="#" role="menuitem" tabindex="-1">Likes</a></li>
-    <li><a href="#" role="menuitem" tabindex="-1">Settings</a></li>
-    <li><a href="#" role="menuitem" tabindex="-1">Logout</a></li>
-  </ul>
-</nav>
+  <div class="wrap">
+    <!-- Main form -->
+    <main class="main card send-form">
+      <h2>Send Likes</h2>
+      <div class="muted">Enter Player ID & configure the amount/options — simulated UI (no backend bound)</div>
 
-<main class="main-content" role="main" aria-label="Dashboard Content">
-  <header class="header">
-    <h1>Dashboard</h1>
-    <div class="profile" aria-label="User Profile">
-      Welcome, Reyes
-    </div>
-  </header>
+      <div style="margin-bottom:14px">
+        <label for="pid">Player ID</label>
+        <input id="pid" type="text" placeholder="e.g. 12345678" />
+      </div>
 
-  <section class="cards" aria-label="Main dashboard cards">
-    <!-- Send Likes card -->
-    <article class="card send-likes" aria-label="Send Likes panel">
-      <h3>Send Likes</h3>
-      <input type="text" id="playerId" placeholder="Enter Player ID" autocomplete="off" autocapitalize="off" />
-      <button id="sendBtn">Send</button>
-      <div id="status" class="status" aria-live="polite"></div>
-    </article>
+      <div class="row">
+        <div class="col">
+          <label for="server">Server</label>
+          <select id="server">
+            <option value="global">Global</option>
+            <option value="brazil">Brazil</option>
+            <option value="india">India</option>
+          </select>
+        </div>
+        <div class="col">
+          <label for="type">Type</label>
+          <select id="type">
+            <option value="likes">Likes</option>
+            <option value="views">Views</option>
+            <option value="followers">Followers</option>
+          </select>
+        </div>
+      </div>
 
-    <!-- Quick Stats card -->
-    <article class="card quick-stats" aria-label="Quick Stats panel">
-      <h3>Quick Stats</h3>
-      <ul>
-        <li><strong>Likes Submitted:</strong> 1200</li>
-        <li><strong>Pending Likes:</strong> 45</li>
-        <li><strong>Users Online:</strong> 12</li>
-      </ul>
-    </article>
-  </section>
-</main>
+      <div class="range-wrap" style="margin-bottom:12px">
+        <label for="amount">Amount: <span id="amountVal">50</span></label>
+        <input id="amount" type="range" min="10" max="500" value="50" class="range" />
+        <div class="help">Use the slider to choose amount. Higher amounts might take longer to process.</div>
+      </div>
+
+      <div style="display:flex;gap:12px;align-items:center;margin-top:10px">
+        <button id="submitBtn" class="btn"><span>Send</span></button>
+        <div id="sendInfo" class="muted" style="font-size:0.95rem">Ready</div>
+      </div>
+
+      <div id="result" style="margin-top:14px;font-weight:700"></div>
+    </main>
+
+    <!-- Side quick stats -->
+    <aside class="aside">
+      <div class="card">
+        <h2>Quick Stats</h2>
+        <div class="stats-list">
+          <div class="stat">
+            <div class="left">
+              <div class="label">Likes Submitted</div>
+              <div class="progress"><i style="width:72%"></i></div>
+            </div>
+            <div class="value">1,245</div>
+          </div>
+
+          <div class="stat">
+            <div class="left">
+              <div class="label">Pending</div>
+              <div class="progress"><i style="width:12%"></i></div>
+            </div>
+            <div class="value">45</div>
+          </div>
+
+          <div class="stat">
+            <div class="left">
+              <div class="label">Uptime</div>
+              <div class="progress"><i style="width:99%"></i></div>
+            </div>
+            <div class="value">99%</div>
+          </div>
+        </div>
+
+        <div class="center" style="margin-top:14px">
+          <button id="refreshStats" class="btn" style="padding:10px 14px;font-size:0.95rem">Refresh</button>
+        </div>
+      </div>
+    </aside>
+  </div>
 
 <script>
+  // particles config (soft, bright dots)
   particlesJS('particles-js', {
     particles: {
-      number: { value: 40 },
-      color: { value: '#a3a3a3' },
+      number: { value: 45, density: { enable: true, value_area: 800 } },
+      color: { value: '#9fbbe8' },
       shape: { type: 'circle' },
-      opacity: { value: 0.35 },
-      size: { value: 3 },
-      line_linked: { enable: true, distance: 140, color: '#a3a3a3', opacity: 0.07, width: 1 },
-      move: { enable: true, speed: 1.3 }
+      opacity: { value: 0.25, anim: { enable:false } },
+      size: { value: 3, random: true },
+      line_linked: { enable:false },
+      move: { enable:true, speed: 1.2, direction: 'none', out_mode:'out' }
     },
     interactivity: {
       detect_on: 'canvas',
-      events: { onhover: { enable: true, mode: 'repulse' }, onclick: { enable: true, mode: 'push' } },
-      modes: { repulse: { distance: 70 }, push: { particles_nb: 3 } }
+      events: { onhover:{ enable:true, mode:'repulse' }, onclick:{ enable:true, mode:'push' } },
+      modes: { repulse:{ distance:90 }, push:{ particles_nb: 4 } }
     },
-    retina_detect: true
+    retina_detect:true
   });
 
-  const sendBtn = document.getElementById('sendBtn');
-  const playerInput = document.getElementById('playerId');
-  const status = document.getElementById('status');
+  // UI logic
+  const amount = document.getElementById('amount');
+  const amountVal = document.getElementById('amountVal');
+  const pid = document.getElementById('pid');
+  const submitBtn = document.getElementById('submitBtn');
+  const sendInfo = document.getElementById('sendInfo');
+  const result = document.getElementById('result');
+  const refreshStats = document.getElementById('refreshStats');
 
-  function validatePlayerId(id) {
-    if (!id || id.trim().length < 3) return 'Player ID must be at least 3 characters.';
-    if (id.trim().length > 64) return 'Player ID is too long.';
-    return null;
+  amount.addEventListener('input', () => amountVal.textContent = amount.value);
+
+  function validate(){
+    const v = pid.value && pid.value.trim().length >= 3;
+    return v;
   }
 
-  async function sendPlayerId(playerId) {
-    status.textContent = 'Sending...';
-    status.className = 'status';
-    sendBtn.disabled = true;
-    try {
-      // Aquí agregas la URL de tu backend para enviar el Player ID a Telegram o a donde quieras
-      const resp = await fetch('https://your-backend-url.com/send', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ playerId: playerId.trim() })
-      });
-      if (!resp.ok) throw new Error('Server error');
-      const data = await resp.json();
-      if (data.ok) {
-        status.textContent = 'Sent successfully! Thanks.';
-        status.className = 'status success';
-        playerInput.value = '';
-      } else {
-        throw new Error(data.error || 'Unknown error');
-      }
-    } catch (e) {
-      status.textContent = 'Error: ' + e.message;
-      status.className = 'status error';
-    } finally {
-      sendBtn.disabled = false;
-    }
-  }
-
-  sendBtn.addEventListener('click', () => {
-    const error = validatePlayerId(playerInput.value);
-    if (error) {
-      status.textContent = error;
-      status.className = 'status error';
+  submitBtn.addEventListener('click', async () => {
+    if(!validate()){
+      result.textContent = 'Invalid Player ID';
+      result.style.color = '#ff6b6b';
       return;
     }
-    sendPlayerId(playerInput.value);
+    submitBtn.disabled = true;
+    sendInfo.textContent = 'Sending...';
+    // show spinner inside button
+    const spinner = document.createElement('span');
+    spinner.className = 'spinner';
+    submitBtn.prepend(spinner);
+
+    // Simulated workflow: this is where you'd call your backend or proxy endpoint.
+    // Example: await fetch('/send', {method:'POST', body: JSON.stringify({...})})
+    // For safety I only simulate success after delay:
+    try{
+      await new Promise(r => setTimeout(r, 1200)); // simulate network
+      // Simulate success
+      result.textContent = `Sent: /like ${pid.value.trim()} (x${amount.value})`;
+      result.style.color = 'var(--success)';
+      sendInfo.textContent = 'Last sent just now';
+    }catch(e){
+      result.textContent = 'Failed to send';
+      result.style.color = '#ff6b6b';
+      sendInfo.textContent = 'Error';
+    }finally{
+      submitBtn.disabled = false;
+      spinner.remove();
+    }
   });
 
-  playerInput.addEventListener('keydown', e => {
-    if (e.key === 'Enter') sendBtn.click();
+  refreshStats.addEventListener('click', async () => {
+    refreshStats.disabled = true;
+    refreshStats.textContent = 'Refreshing...';
+    await new Promise(r => setTimeout(r,800));
+    // Ideally you'd fetch fresh numbers. Here we just randomize small amounts.
+    document.querySelectorAll('.stat .value').forEach((el, idx) => {
+      const base = [1245,45,99][idx];
+      const random = Math.floor(Math.random()*20) - 5;
+      el.textContent = (base + random) + (idx===2? (idx===2? '%' : '') : '');
+    });
+    refreshStats.disabled = false;
+    refreshStats.textContent = 'Refresh';
   });
 </script>
-
 </body>
   </html>
