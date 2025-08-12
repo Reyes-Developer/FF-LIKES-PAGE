@@ -26,7 +26,6 @@ document.addEventListener('DOMContentLoaded', function() {
     });
   }
 
-  // Elementos del DOM
   const pid = document.getElementById('pid');
   const submitBtn = document.getElementById('submitBtn');
   const sendInfo = document.getElementById('sendInfo');
@@ -39,12 +38,10 @@ document.addEventListener('DOMContentLoaded', function() {
   const unlockBtn = document.getElementById('unlockBtn');
   const errorMsg = document.getElementById('errorMsg');
 
-  // Validación
   function validate() {
     return pid.value && pid.value.trim().length >= 3;
   }
 
-  // Loader animado para el resultado
   function showResultLoader() {
     result.innerHTML = `
       <div class="result-card">
@@ -54,19 +51,9 @@ document.addEventListener('DOMContentLoaded', function() {
     `;
   }
 
-  // Mapeo de servidores a códigos API
-  const serverMap = {
-    global: 'me',
-    brazil: 'br',
-    india: 'ind',
-    us: 'na'
-  };
-
-  // Evento Submit
   submitBtn.addEventListener('click', async () => {
     if (!validate()) {
-      result.textContent = 'Invalid Player ID';
-      result.style.color = '#ff6b6b';
+      result.innerHTML = `<div class="result-card error">Invalid Player ID</div>`;
       return;
     }
 
@@ -77,18 +64,14 @@ document.addEventListener('DOMContentLoaded', function() {
     submitBtn.prepend(spinner);
 
     try {
-      if (type.value === 'views') {
-        throw new Error('Views feature is temporarily under maintenance.');
-      }
-
       const uid = pid.value.trim();
-      const region = serverMap[server.value] || server.value;
+      const region = server.value.trim(); // Aquí va lo que tú seleccionas
 
       if (type.value === 'info') {
         showResultLoader();
-
         const apiUrl = `https://jnl-info-v4.vercel.app/player-info?uid=${uid}&region=${region}`;
         const res = await fetch(apiUrl);
+
         if (!res.ok) throw new Error(`API error: ${res.status}`);
         const data = await res.json();
 
@@ -107,19 +90,11 @@ document.addEventListener('DOMContentLoaded', function() {
         sendInfo.textContent = 'Player info fetched';
       } else {
         await new Promise(r => setTimeout(r, 1200));
-        result.innerHTML = `
-          <div class="result-card success">
-            Sent: /like ${uid}
-          </div>
-        `;
+        result.innerHTML = `<div class="result-card success">Sent: /like ${uid}</div>`;
         sendInfo.textContent = 'Last sent just now';
       }
     } catch (error) {
-      result.innerHTML = `
-        <div class="result-card error">
-          ${error.message || 'Failed to send'}
-        </div>
-      `;
+      result.innerHTML = `<div class="result-card error">${error.message || 'Failed to send'}</div>`;
       sendInfo.textContent = 'Error';
     } finally {
       submitBtn.disabled = false;
@@ -127,7 +102,6 @@ document.addEventListener('DOMContentLoaded', function() {
     }
   });
 
-  // Lockscreen
   unlockBtn.addEventListener('click', unlockDashboard);
   passwordInput.addEventListener('keydown', (e) => e.key === 'Enter' && unlockDashboard());
 
