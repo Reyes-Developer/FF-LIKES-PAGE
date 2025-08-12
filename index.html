@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta name="description" content="Free Fire Dashboard - Get player info, views and likes">
+  <title>Reyes Developer - Dashboard (Free Fire)</title>
+
+  <!-- Preload para fuentes -->
+  <link rel="preload" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" as="style" onload="this.rel='stylesheet'">
+  <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap"></noscript>
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="styles.css" />
+
+  <!-- JS (cargados con defer) -->
+  <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js" defer></script>
+  <script src="app.js" defer></script>
+</head>
+<body>
+  <!-- LOCK SCREEN -->
+  <div id="lockscreen">
+    <div class="wrap">
+      <h2>Enter Password</h2>
+      <input type="password" id="passwordInput" placeholder="Enter code here" autocomplete="off" />
+      <button id="unlockBtn" class="btn">Unlock</button>
+      <div class="error-msg" id="errorMsg"></div>
+    </div>
+  </div>
+
+  <!-- ORIGINAL PAGE -->
+  <div id="particles-js"></div>
+  <div class="wrap" id="mainContent" style="display:none;">
+    <h2>Free Fire Dashboard</h2>
+    <div class="muted">Free Fire Info, Views and Likes for Free— Reyes Developer</div>
+
+    <div>
+      <label for="pid">Player ID</label>
+      <input id="pid" type="text" placeholder="e.g. 12345678" />
+    </div>
+
+    <div style="display:flex;gap:12px;margin-bottom:12px;">
+      <div style="flex:1;">
+        <label for="server">Server</label>
+        <select id="server">
+          <option value="global">Global</option>
+          <option value="brazil">Brazil</option>
+          <option value="india">India</option>
+          <option value="us">United States</option>
+        </select>
+      </div>
+      <div style="flex:1;">
+        <label for="type">Type</label>
+        <select id="type">
+          <option value="likes">Likes</option>
+          <option value="views">Views</option>
+          <option value="info">Info</option>
+        </select>
+      </div>
+    </div>
+
+    <button id="submitBtn" class="btn"><span>Send</span></button>
+    <div id="sendInfo" class="muted" style="font-size:0.95rem; margin-top:10px;">Ready</div>
+    <div id="result"></div>
+  </div>
+</body>
+</html>
